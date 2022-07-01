@@ -1,1 +1,1 @@
-[]
+[{"title":"Producto 1","price":100,"thumbnail":"http://test1.com","id":1},{"title":"Producto 2","price":200,"thumbnail":"http://test2.com","id":2},{"title":"Producto 3","price":300,"thumbnail":"http://test3.com","id":3}]

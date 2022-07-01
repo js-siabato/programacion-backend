@@ -55,29 +55,36 @@ class Contenedor {
   }
 }
 
-const contenedor = new Contenedor("./productos.txt");
+module.exports = Contenedor;
 
 products = [
   {
     title: "Producto 1",
-    price: 1,
-    thumbnail: "http://test.com",
+    price: 100,
+    thumbnail: "http://test1.com",
   },
   {
     title: "Producto 2",
-    price: 2,
-    thumbnail: "http://test.com",
+    price: 200,
+    thumbnail: "http://test2.com",
+  },
+  {
+    title: "Producto 3",
+    price: 300,
+    thumbnail: "http://test3.com",
   },
 ];
 
-contenedor
-  .save(products)
-  .then((result) => {
-    console.log("🚀 ~ [RESULT]", result);
-  })
-  .catch((err) => {
-    console.log("🚀 ~ [ERROR]", err);
-  });
+// const contenedor = new Contenedor("./productos.txt");
+
+// contenedor
+//   .save(products)
+//   .then((result) => {
+//     console.log("🚀 ~ [RESULT]", result);
+//   })
+//   .catch((err) => {
+//     console.log("🚀 ~ [ERROR]", err);
+//   });
 
 // contenedor
 //   .getAll()
