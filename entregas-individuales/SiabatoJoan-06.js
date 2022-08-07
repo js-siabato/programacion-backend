@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
-const config = require("./config.js");
+const config = require("../config.js");
 const Contenedor = require("./SiabatoJoan-04.js");
 
 const app = express();

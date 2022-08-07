@@ -1,8 +1,36 @@
 const express = require("express");
 
 const Controller = require("./controller");
-
+const app = express();
 const router = express.Router();
+app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+router.get("/agregar", (req, res) => {
+  try {
+    res.render("insertProduct");
+  } catch (err) {
+    res.status(500).send("Error al agregar producto: " + err);
+  }
+});
+
+router.get("/ver", (req, res) => {
+  Controller.list()
+    .then((list) => {
+      if (list.message) {
+        res.render("seeProducts", { list: 0 });
+      } else {
+        res.render("seeProducts", { list });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send("Error en la consulta de productos: " + err);
+    });
+});
 
 //Routers
 router.get("/", list);
@@ -31,7 +59,7 @@ function get(req, res, next) {
 function insert(req, res, next) {
   Controller.insert(req.body)
     .then((product) => {
-      res.status(201).send(product);
+      res.status(201).render("insertProduct");
     })
     .catch(next);
 }

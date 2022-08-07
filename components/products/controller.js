@@ -1,20 +1,20 @@
 let products = [
   {
-    title: "Producto 1",
-    price: 100,
-    thumbnail: "http://test1.com",
+    title: "Cámara",
+    price: 900000,
+    thumbnail: "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Camera-256.png",
     id: 1,
   },
   {
-    title: "Producto 2",
-    price: 200,
-    thumbnail: "http://test2.com",
+    title: "Rosa",
+    price: 2500,
+    thumbnail: "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Rose-256.png",
     id: 2,
   },
   {
-    title: "Producto 3",
-    price: 300,
-    thumbnail: "http://test3.com",
+    title: "Fresas",
+    price: 10000,
+    thumbnail: "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Strawberry-256.png",
     id: 3,
   },
 ];

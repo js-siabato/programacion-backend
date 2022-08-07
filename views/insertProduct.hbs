@@ -1,0 +1,43 @@
+<div class="container mb-5">
+  <h2 class="center">Agregar producto nuevo</h2>
+  <form
+    class="row g-3 justify-content-evenly"
+    id="productonuevo"
+    name="productonuevo"
+    autocomplete="off"
+    action="/api/productos"
+    method="POST"
+  >
+    <div class="col-md-6">
+      <label class="form-label" for="title">Nombre del producto</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="price">Precio</label>
+      <input
+        type="text"
+        class="form-control"
+        id="price"
+        name="price"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="thumbnail">URL de la foto</label>
+      <input
+        type="text"
+        class="form-control"
+        id="thumbnail"
+        name="thumbnail"
+        required
+      />
+    </div>
+    <input class="btn btn-primary" type="submit" value="Agregar producto" />
+  </form>
+</div>
