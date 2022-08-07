@@ -1,8 +1,9 @@
 const express = require("express");
-
-const Controller = require("./controller");
 const app = express();
 const router = express.Router();
+
+const Controller = require("./controller");
+
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -11,24 +12,16 @@ app.use(
 );
 
 router.get("/agregar", (req, res) => {
-  try {
-    res.render("insertProduct");
-  } catch (err) {
-    res.status(500).send("Error al agregar producto: " + err);
-  }
-});
-
-router.get("/ver", (req, res) => {
   Controller.list()
     .then((list) => {
       if (list.message) {
-        res.render("seeProducts", { list: 0 });
+        res.render("insertProduct", { list: 0 });
       } else {
-        res.render("seeProducts", { list });
+        res.render("insertProduct", { list });
       }
     })
     .catch((err) => {
-      res.status(500).send("Error en la consulta de productos: " + err);
+      res.status(500).send("ERROR: " + err);
     });
 });
 
