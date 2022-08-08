@@ -1,4 +1,5 @@
 const express = require("express");
+
 const app = express();
 const router = express.Router();
 
@@ -11,13 +12,13 @@ app.use(
   })
 );
 
-router.get("/agregar", (req, res) => {
+router.get("/", (req, res) => {
   Controller.list()
     .then((list) => {
       if (list.message) {
-        res.render("insertProduct", { list: 0 });
+        res.render("home", { list: 0 });
       } else {
-        res.render("insertProduct", { list });
+        res.render("home", { list });
       }
     })
     .catch((err) => {
@@ -26,11 +27,11 @@ router.get("/agregar", (req, res) => {
 });
 
 //Routers
-router.get("/", list);
-router.get("/:id", get);
-router.post("/", insert);
-router.put("/:id", update);
-router.delete("/:id", remove);
+router.get("/api/productos", list);
+router.get("/api/productos/:id", get);
+router.post("/api/productos", insert);
+router.put("/api/productos/:id", update);
+router.delete("/api/productos/:id", remove);
 
 //Internal Functions
 function list(req, res, next) {
@@ -52,7 +53,7 @@ function get(req, res, next) {
 function insert(req, res, next) {
   Controller.insert(req.body)
     .then((product) => {
-      res.status(201).render("insertProduct");
+      res.status(201).send(product);
     })
     .catch(next);
 }
