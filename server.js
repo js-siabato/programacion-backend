@@ -52,22 +52,11 @@ io.on("connection", (socket) => {
   const products = fs.readFileSync("data/products.txt", "utf-8");
   const messages = fs.readFileSync("data/messages.txt", "utf-8");
 
-  if (JSON.parse(products).length) {
-    socket.emit("products", JSON.parse(products));
-  }
+  socket.emit("products", JSON.parse(products));
   socket.emit("messages", JSON.parse(messages));
 
-  socket.on("newProduct", (product) => {
-    let docProducts = fs.readFileSync("data/products.txt", "utf-8");
-    if (!docProducts || !JSON.parse(docProducts).length) {
-      docProducts = [];
-    } else {
-      docProducts = JSON.parse(docProducts);
-    }
-    docProducts.push(product);
-    fs.writeFileSync("data/products.txt", JSON.stringify(docProducts));
-
-    io.sockets.emit("products", docProducts);
+  socket.on("newProduct", (newProduct) => {
+    io.sockets.emit("products", newProduct);
   });
 
   socket.on("newMessage", (message) => {

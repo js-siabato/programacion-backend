@@ -23,7 +23,7 @@ router.delete("/:id", remove);
 function list(req, res, next) {
   Controller.list()
     .then((list) => {
-      res.send(list);
+      res.status(200).send(list);
     })
     .catch(next);
 }
@@ -31,7 +31,7 @@ function list(req, res, next) {
 function get(req, res, next) {
   Controller.get(req.params.id)
     .then((product) => {
-      res.send(product);
+      res.status(200).send(product);
     })
     .catch(next);
 }
@@ -47,7 +47,7 @@ function insert(req, res, next) {
 function update(req, res, next) {
   Controller.update(req.params.id, req.body)
     .then((product) => {
-      res.send(product);
+      res.status(200).send(product);
     })
     .catch(next);
 }
@@ -55,7 +55,7 @@ function update(req, res, next) {
 function remove(req, res, next) {
   Controller.remove(req.params.id)
     .then((product) => {
-      res.send(product);
+      res.status(200).send(product);
     })
     .catch(next);
 }
