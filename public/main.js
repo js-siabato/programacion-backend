@@ -45,7 +45,6 @@ function addProduct(e) {
   })
     .then((response) => response.json())
     .then((json) => {
-      console.log("🚀 ~ file: main.js ~ line 53 ~ .then ~ json", json);
       socket.emit("newProduct", json);
     })
     .catch((err) => {

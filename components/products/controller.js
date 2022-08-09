@@ -1,26 +1,6 @@
-let products = [
-  {
-    title: "Cámara",
-    price: "900000",
-    thumbnail:
-      "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Camera-256.png",
-    id: 1,
-  },
-  {
-    title: "Rosa",
-    price: "2500",
-    thumbnail:
-      "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Rose-256.png",
-    id: 2,
-  },
-  {
-    title: "Fresas",
-    price: "10000",
-    thumbnail:
-      "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Strawberry-256.png",
-    id: 3,
-  },
-];
+const fs = require("fs");
+
+let products = JSON.parse(fs.readFileSync("data/products.txt", "utf-8"));
 
 async function list() {
   if (!products.length) {
@@ -49,8 +29,7 @@ async function insert(body) {
 
   body.id = id;
   products.push(body);
-  // return body;
-  return products;
+  return body;
 }
 
 async function update(id, body) {

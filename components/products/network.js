@@ -12,26 +12,12 @@ app.use(
   })
 );
 
-router.get("/", (req, res) => {
-  Controller.list()
-    .then((list) => {
-      if (list.message) {
-        res.render("home", { list: 0 });
-      } else {
-        res.render("home", { list });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send("ERROR: " + err);
-    });
-});
-
 //Routers
-router.get("/api/productos", list);
-router.get("/api/productos/:id", get);
-router.post("/api/productos", insert);
-router.put("/api/productos/:id", update);
-router.delete("/api/productos/:id", remove);
+router.get("/", list);
+router.get("/:id", get);
+router.post("/", insert);
+router.put("/:id", update);
+router.delete("/:id", remove);
 
 //Internal Functions
 function list(req, res, next) {
