@@ -1,23 +1,24 @@
 const fs = require("fs");
+const CodeGenerator = require("node-code-generator");
 const config = require("../../config");
 
 let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
+const generator = new CodeGenerator();
+const pattern = "ABC#+";
 
 async function list() {
   if (!products.length) {
     return { message: "Sin productos!!" };
-  } else {
-    return products;
   }
+  return products;
 }
 
 async function get(id) {
   const product = products.find((product) => product.id == id);
   if (!product) {
     return { error: "Producto no encontrado!!" };
-  } else {
-    return product;
   }
+  return product;
 }
 
 async function insert(body) {
@@ -29,6 +30,8 @@ async function insert(body) {
   }
   for (let i = 0; i < body.length; i++) {
     body[i].id = id++;
+    body[i].timestamp = Date.now();
+    body[i].codigo = generator.randomChars(body[i].nombre, 8).toUpperCase();
     products.push(body[i]);
   }
   await fs.writeFileSync(config.data.products, JSON.stringify(products));
@@ -40,25 +43,23 @@ async function update(id, body) {
   let list = products.filter((listProd) => listProd.id != id);
   if (!product) {
     return { error: "Producto no encontrado!!" };
-  } else {
-    product.title = body.title;
-    product.price = body.price;
-    product.thumbnail = body.thumbnail;
-    list.push(product);
-    await fs.writeFileSync(config.data.products, JSON.stringify(list));
-    return product;
   }
+  product.title = body.title;
+  product.price = body.price;
+  product.thumbnail = body.thumbnail;
+  list.push(product);
+  await fs.writeFileSync(config.data.products, JSON.stringify(list));
+  return product;
 }
 
 async function remove(id) {
   const product = products.find((product) => product.id == id);
   if (!product) {
     return { error: "Producto no encontrado!!" };
-  } else {
-    products.splice(products.indexOf(product), 1);
-    await fs.writeFileSync(config.data.products, JSON.stringify(products));
-    return products;
   }
+  products.splice(products.indexOf(product), 1);
+  await fs.writeFileSync(config.data.products, JSON.stringify(products));
+  return products;
 }
 
 module.exports = { list, get, insert, update, remove };

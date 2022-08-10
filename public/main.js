@@ -5,13 +5,13 @@ function renderProduct(data) {
     .map((product) => {
       return `<tr>
                 <td>
-                  ${product.title}
+                  ${product.nombre}
                 </td>
                 <td>
-                  $ ${product.price}
+                  $ ${product.precio}
                 </td>
                 <td>
-                  <img src="${product.thumbnail}" width="50" height="50">
+                  <img src="${product.foto}" width="50" height="50">
                 </td>
               </tr>`;
     })
@@ -31,16 +31,19 @@ function renderMessages(messages) {
   document.getElementById("messages").innerHTML = html;
 }
 
-function addProduct(e) {
+async function addProduct(e) {
   const product = {
-    title: document.getElementById("title").value,
-    price: document.getElementById("price").value,
-    thumbnail: document.getElementById("thumbnail").value,
+    nombre: document.getElementById("name").value,
+    descripcion: document.getElementById("description").value,
+    foto: document.getElementById("phone").value,
+    precio: document.getElementById("price").value,
+    stock: document.getElementById("stock").value,
   };
   const form = document.getElementById("productonuevo");
+
   fetch("http://localhost:8080/api/productos", {
     method: "POST",
-    body: JSON.stringify(product),
+    body: [JSON.stringify(product)],
     headers: { "Content-type": "application/json;charset=UTF-8" },
   })
     .then((response) => response.json())

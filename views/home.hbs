@@ -7,15 +7,35 @@
     name="productonuevo"
     autocomplete="off"
     target="dummyframe"
-    onsubmit="addProduct()"
+    onsubmit="addProduct(this)"
   >
     <div class="col-md-6">
       <label class="form-label" for="title">Nombre del producto</label>
       <input
         type="text"
         class="form-control"
-        id="title"
+        id="name"
         name="title"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="price">Descripción</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        name="price"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="thumbnail">URL de la foto</label>
+      <input
+        type="text"
+        class="form-control"
+        id="phone"
+        name="thumbnail"
         required
       />
     </div>
@@ -30,12 +50,12 @@
       />
     </div>
     <div class="col-md-6">
-      <label class="form-label" for="thumbnail">URL de la foto</label>
+      <label class="form-label" for="price">Stock</label>
       <input
         type="text"
         class="form-control"
-        id="thumbnail"
-        name="thumbnail"
+        id="stock"
+        name="price"
         required
       />
     </div>
@@ -59,13 +79,13 @@
               {{#each list}}
               <tr id="row">
                   <td>
-                      {{this.title}}
+                      {{this.nombre}}
                   </td>
                   <td>
-                      $ {{this.price}}
+                      $ {{this.precio}}
                   </td>
                   <td>
-                      <img src="{{this.thumbnail}}" width="50" height="50">
+                      <img src="{{this.foto}}" width="50" height="50">
                   </td>
               </tr>
               {{/each}}
@@ -80,7 +100,7 @@
 <div class="container mb-5">
   <h1>Centro de mensajes</h1>
   <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-    <form onsubmit="addMessage()" id="newMessage" target="dummyframe">
+    <form onsubmit="addMessage(this)" id="newMessage" target="dummyframe">
       <div class="col-md-6">
       <label class="form-label" for="title">Email</label>
       <input

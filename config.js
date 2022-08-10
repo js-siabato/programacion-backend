@@ -5,7 +5,7 @@ module.exports = {
   data: {
     products: "data/products.txt",
     messages: "data/messages.txt",
-    cards: "data/cards.txt",
+    carts: "data/carts.txt",
   },
   rol: {
     administrator: true,
