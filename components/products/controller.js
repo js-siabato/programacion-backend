@@ -2,11 +2,10 @@ const fs = require("fs");
 const CodeGenerator = require("node-code-generator");
 const config = require("../../config");
 
-let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
 const generator = new CodeGenerator();
-const pattern = "ABC#+";
 
 async function list() {
+  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
   if (!products.length) {
     return { message: "Sin productos!!" };
   }
@@ -14,6 +13,7 @@ async function list() {
 }
 
 async function get(id) {
+  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
   const product = products.find((product) => product.id == id);
   if (!product) {
     return { error: "Producto no encontrado!!" };
@@ -22,6 +22,7 @@ async function get(id) {
 }
 
 async function insert(body) {
+  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
   let id = 1;
   if (!products.length) {
     products = [];
@@ -39,6 +40,7 @@ async function insert(body) {
 }
 
 async function update(id, body) {
+  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
   let product = products.find((product) => product.id == id);
   let list = products.filter((listProd) => listProd.id != id);
   if (!product) {
@@ -53,6 +55,7 @@ async function update(id, body) {
 }
 
 async function remove(id) {
+  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
   const product = products.find((product) => product.id == id);
   if (!product) {
     return { error: "Producto no encontrado!!" };

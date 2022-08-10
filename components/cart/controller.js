@@ -1,10 +1,8 @@
 const fs = require("fs");
 const config = require("../../config");
 
-let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
-let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
-
 async function insert() {
+  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
   let id = 1;
 
   if (!carts.length) {
@@ -25,6 +23,7 @@ async function insert() {
 }
 
 async function remove(id) {
+  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
   const cart = carts.find((cart) => cart.id == id);
   if (!cart) {
     return { error: "Carrito no encontrado!!" };
@@ -35,6 +34,7 @@ async function remove(id) {
 }
 
 async function listCart(id) {
+  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
   const cart = carts.find((cart) => cart.id == id);
   if (!cart) {
     return { Error: "Carrito no encontrado!!" };
@@ -45,6 +45,9 @@ async function listCart(id) {
 }
 
 async function insertProductsCart(id, body) {
+  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
+  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
+
   const cart = carts.find((cart) => cart.id == id);
   const listCart = carts.filter((cart) => cart.id != id);
   const product = products.find((product) => product.id == body.id_prod);
@@ -62,6 +65,7 @@ async function insertProductsCart(id, body) {
 }
 
 async function removeProductCart(idCart, idProd) {
+  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
   const cart = carts.find((cart) => cart.id == idCart);
   const listCart = carts.filter((cart) => cart.id != idCart);
 

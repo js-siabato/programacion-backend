@@ -7,9 +7,6 @@ const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 
 const fs = require("fs");
-const productsData = fs.readFileSync("data/products.txt", "utf-8");
-
-const handlebars = require("express-handlebars");
 
 const config = require("./config.js");
 const products = require("./components/products/network");
@@ -18,27 +15,17 @@ const cart = require("./components/cart/network");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.engine(
-  "hbs",
-  handlebars.engine({
-    extname: "hbs",
-    defaultLayout: "index",
-    layoutsDir: __dirname + "/public",
-  })
-);
-
-app.set("view engine", "hbs");
-app.set("views", "./views");
-
-app.use(express.static("./public"));
-
-//VISTA PARA PRODUCTOS USANDO HANDLEBARS
-app.get("/", (req, res) => {
-  res.render("home", { list: JSON.parse(productsData) });
-});
-
 app.use("/api/productos", products);
 app.use("/api/carrito", cart);
+
+app.use((req, res) => {
+  res
+    .status(404)
+    .send({
+      error: "-2",
+      descripción: `ruta ${req.url} metodo ${req.method} no implementadas.`,
+    });
+});
 
 const server = httpServer.listen(config.api.port, () => {
   console.log("Api escuchando en el puerto ", config.api.port);
