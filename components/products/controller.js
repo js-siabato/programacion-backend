@@ -1,68 +1,73 @@
-const fs = require("fs");
 const CodeGenerator = require("node-code-generator");
-const config = require("../../config");
+const TABLE = "productos";
 
 const generator = new CodeGenerator();
 
-async function list() {
-  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
-  if (!products.length) {
-    return { message: "Sin productos!!" };
-  }
-  return products;
-}
+module.exports = function (injectedStore) {
+  let store = injectedStore;
 
-async function get(id) {
-  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
-  const product = products.find((product) => product.id == id);
-  if (!product) {
-    return { error: "Producto no encontrado!!" };
+  async function list() {
+    const result = await store.list(TABLE);
+    if (!result.length) {
+      return { resultado: "No se encontraron productos." };
+    }
+    return result;
   }
-  return product;
-}
 
-async function insert(body) {
-  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
-  let id = 1;
-  if (!products.length) {
-    products = [];
-  } else {
-    id = products[products.length - 1].id + 1;
+  async function get(id) {
+    const result = await store.get(TABLE, id);
+    if (!result.length) {
+      return { error: "Producto no encontrado!!" };
+    }
+    return result;
   }
-  for (let i = 0; i < body.length; i++) {
-    body[i].id = id++;
-    body[i].timestamp = Date.now();
-    body[i].codigo = generator.randomChars(body[i].nombre, 8).toUpperCase();
-    products.push(body[i]);
-  }
-  await fs.writeFileSync(config.data.products, JSON.stringify(products));
-  return products;
-}
 
-async function update(id, body) {
-  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
-  let product = products.find((product) => product.id == id);
-  let list = products.filter((listProd) => listProd.id != id);
-  if (!product) {
-    return { error: "Producto no encontrado!!" };
-  }
-  product.title = body.title;
-  product.price = body.price;
-  product.thumbnail = body.thumbnail;
-  list.push(product);
-  await fs.writeFileSync(config.data.products, JSON.stringify(list));
-  return product;
-}
+  async function insert(body) {
+    for (let i = 0; i < body.length; i++) {
+      body[i].codigo = generator.randomChars(body[i].nombre, 8).toUpperCase();
+    }
+    const result = await store.insert(TABLE, body);
 
-async function remove(id) {
-  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
-  const product = products.find((product) => product.id == id);
-  if (!product) {
-    return { error: "Producto no encontrado!!" };
+    if (result) {
+      return {
+        resultado: "Producto(s) agregado(s) exitosamente.",
+        productos: await list(),
+      };
+    } else {
+      return {
+        ERROR: "No se agregaron los producto(s).",
+      };
+    }
   }
-  products.splice(products.indexOf(product), 1);
-  await fs.writeFileSync(config.data.products, JSON.stringify(products));
-  return products;
-}
 
-module.exports = { list, get, insert, update, remove };
+  async function update(id, body) {
+    const result = await store.update(TABLE, id, body);
+
+    if (result) {
+      return {
+        resultado: "Producto actualizado exitosamente.",
+        productos: await store.get(TABLE, id),
+      };
+    } else {
+      return {
+        ERROR: "Producto no encontrado!!",
+      };
+    }
+  }
+
+  async function remove(id) {
+    const result = await store.remove(TABLE, id);
+
+    if (result) {
+      return {
+        resultado: "Producto eliminado exitosamente.",
+      };
+    } else {
+      return {
+        ERROR: "Producto no encontrado!!",
+      };
+    }
+  }
+
+  return { list, get, insert, update, remove };
+};

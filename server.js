@@ -6,25 +6,43 @@ const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 
-const fs = require("fs");
-
 const config = require("./config.js");
+
+const handlebars = require("express-handlebars");
+
 const products = require("./components/products/network");
 const cart = require("./components/cart/network");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.engine(
+  "hbs",
+  handlebars.engine({
+    extname: "hbs",
+    defaultLayout: "index",
+    layoutsDir: __dirname + "/public",
+  })
+);
+
+app.set("view engine", "hbs");
+app.set("views", "./views");
+
+app.use(express.static("./public"));
+
+//VISTA PARA PRODUCTOS USANDO HANDLEBARS
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
 app.use("/api/productos", products);
 app.use("/api/carrito", cart);
 
 app.use((req, res) => {
-  res
-    .status(404)
-    .send({
-      error: "-2",
-      descripción: `ruta ${req.url} metodo ${req.method} no implementadas.`,
-    });
+  res.status(404).send({
+    error: "-2",
+    descripción: `ruta ${req.url} metodo ${req.method} no implementadas.`,
+  });
 });
 
 const server = httpServer.listen(config.api.port, () => {
@@ -37,11 +55,6 @@ server.on("error", (error) => {
 
 io.on("connection", (socket) => {
   console.log(`El cliente ${socket.id} se ha conectado.`);
-  const products = fs.readFileSync(config.data.products, "utf-8");
-  const messages = fs.readFileSync(config.data.messages, "utf-8");
-
-  socket.emit("products", JSON.parse(products));
-  socket.emit("messages", JSON.parse(messages));
 
   socket.on("newProduct", (newProduct) => {
     io.sockets.emit("products", newProduct);
