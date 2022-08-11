@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 
-const Controller = require("./controller");
+const Controller = require("./index");
 
 app.use(express.json());
 app.use(

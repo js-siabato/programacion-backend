@@ -12,6 +12,7 @@ const handlebars = require("express-handlebars");
 
 const products = require("./components/products/network");
 const cart = require("./components/cart/network");
+const messages = require("./components/messages/network");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,6 +38,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/productos", products);
 app.use("/api/carrito", cart);
+app.use("/api/mensajes", messages);
 
 app.use((req, res) => {
   res.status(404).send({
@@ -56,20 +58,11 @@ server.on("error", (error) => {
 io.on("connection", (socket) => {
   console.log(`El cliente ${socket.id} se ha conectado.`);
 
-  socket.on("newProduct", (newProduct) => {
-    io.sockets.emit("products", newProduct);
+  socket.on("newProduct", (products) => {
+    io.sockets.emit("products", products);
   });
 
-  socket.on("newMessage", (message) => {
-    let docMessages = fs.readFileSync(config.data.messages, "utf-8");
-    if (!docMessages || !JSON.parse(docMessages).length) {
-      docMessages = [];
-    } else {
-      docMessages = JSON.parse(docMessages);
-    }
-    docMessages.push(message);
-    fs.writeFileSync(config.data.messages, JSON.stringify(docMessages));
-
-    io.sockets.emit("messages", docMessages);
+  socket.on("newMessage", (messages) => {
+    io.sockets.emit("messages", messages);
   });
 });
