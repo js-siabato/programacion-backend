@@ -1,8 +1,10 @@
 const express = require("express");
 
-const Controller = require("./controller");
 const app = express();
 const router = express.Router();
+
+const Controller = require("./controller");
+
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -10,34 +12,26 @@ app.use(
   })
 );
 
-router.get("/agregar", (req, res) => {
-  try {
-    res.render("insertProduct");
-  } catch (err) {
-    res.status(500).send("Error al agregar producto: " + err);
-  }
-});
-
-router.get("/ver", (req, res) => {
+router.get("/", (req, res) => {
   Controller.list()
     .then((list) => {
       if (list.message) {
-        res.render("seeProducts", { list: 0 });
+        res.render("home", { list: 0 });
       } else {
-        res.render("seeProducts", { list });
+        res.render("home", { list });
       }
     })
     .catch((err) => {
-      res.status(500).send("Error en la consulta de productos: " + err);
+      res.status(500).send("ERROR: " + err);
     });
 });
 
 //Routers
-router.get("/", list);
-router.get("/:id", get);
-router.post("/", insert);
-router.put("/:id", update);
-router.delete("/:id", remove);
+router.get("/api/productos", list);
+router.get("/api/productos/:id", get);
+router.post("/api/productos", insert);
+router.put("/api/productos/:id", update);
+router.delete("/api/productos/:id", remove);
 
 //Internal Functions
 function list(req, res, next) {
@@ -59,7 +53,7 @@ function get(req, res, next) {
 function insert(req, res, next) {
   Controller.insert(req.body)
     .then((product) => {
-      res.status(201).render("insertProduct");
+      res.status(201).send(product);
     })
     .catch(next);
 }
