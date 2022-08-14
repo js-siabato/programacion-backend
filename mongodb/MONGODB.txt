@@ -5,4 +5,27 @@ db.createCollection("mensajes")       -> Creación de la collection mensajes
 db.createCollection("productos")      -> Creación de la collection productos
 show collections                      -> Validamos las collections actuales
 
-PUNTO 1
+PUNTO 1 Y 2
+db.mensajes.insertMany([{"id": 1,"email":"leidy@test.com","timestamp":ISODate(),"mensaje":"Hola a todo, como estan?"},{"id": 2,"email":"joan@test.com","timestamp":ISODate(),"mensaje":"Hola, muy bien"},{"id": 3,"email":"joan@test.com","timestamp":ISODate(),"mensaje":"Que haces?"},{"id": 4,"email":"leidy@test.com","timestamp":ISODate(),"mensaje":"Estudiando un poco, y tu?"},{"id": 5,"email":"joan@test.com","timestamp":ISODate(),"mensaje":"Igual, para aprender mas"},{"id": 6,"email":"leidy@test.com","timestamp":ISODate(),"mensaje":"Genial igual yo, y como resolviste el problema de la clase?"},{"id": 7,"email":"joan@test.com","timestamp":ISODate(),"mensaje":"Busque ayuda, mi tutor me ayudo un poco"},{"id": 8,"email":"joan@test.com","timestamp":ISODate(),"mensaje":"Quieres que lo revisemos juntos"},{"id": 9,"email":"leidy@test.com","timestamp":ISODate(),"mensaje":"Si por favor, seria genial"},{"id": 10,"email":"leidy@test.com","timestamp":ISODate(),"mensaje":"Gracias."}])
+db.productos.insertMany([{"id": 1,"nombre": "Girasol","descripcion": "Girasol para tu jardin","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Sunflower-512.png","precio": 120,"stock": 90,"timestamp":ISODate(),"codigo": "GLARALRO"},{"id": 2,"nombre": "Cámara","descripcion": "Cámara SONY profesional","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Camera-512.png","precio": 580,"stock": 90,"timestamp":ISODate(),"codigo": "AÁÁAAMÁA"},{"id": 3,"nombre": "Calculadora","descripcion": "Calculadora","foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png","precio": 900,"stock": 90,"timestamp":ISODate(),"codigo": "ASDFE4FS"},{"id": 4,"nombre": "Microscopio","descripcion": "Microscopio","foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/microscope-lab-science-school-256.png","precio": 1280,"stock": 90,"timestamp":ISODate(),"codigo": "ASDWCESFE"},{"id": 5,"nombre": "Manzana","descripcion": "Manzana","foto": "https://cdn3.iconfinder.com/data/icons/education-209/64/apple-fruit-science-school-512.png","precio": 1700,"stock": 90,"timestamp":ISODate(),"codigo": "ADWEARX"},{"id": 6,"nombre": "Fresas","descripcion": "Fresas","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Strawberry-256.png","precio": 2300,"stock": 90,"timestamp":ISODate(),"codigo": "ASDWRTYR"},{"id": 7,"nombre": "Valla","descripcion": "Valla","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Fence-256.png","precio": 2860,"stock": 90,"timestamp":ISODate(),"codigo": "HJTYVGJHYJ"},{"id": 8,"nombre": "Botas","descripcion": "Botas","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Boot-256.png","precio": 3350,"stock": 90,"timestamp":ISODate(),"codigo": "ASDEHCVB"},{"id": 9,"nombre": "Rosa","descripcion": "Rosa","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Rose-256.png","precio": 4320,"stock": 90,"timestamp":ISODate(),"codigo": "SIUOPHJKJ"},{"id": 10,"nombre": "Gusano","descripcion": "Gusano","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Worm-256.png","precio": 4990,"stock": 90,"timestamp":ISODate(),"codigo": "YTOUKGFHY"}])
+
+PUNTO 3
+db.mensajes.find().pretty()
+db.productos.find().pretty()
+
+PUNTO 4
+db.mensajes.estimatedDocumentCount()
+db.productos.estimatedDocumentCount()
+
+PUNTO 5-A
+db.productos.insertOne({"id": 11,"nombre": "Manguera","descripcion": "Manguera","foto": "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Hose-256.png","precio": 4999,"stock": 10,"timestamp":ISODate(),"codigo": "SDFGRYYH"})
+
+PUNTO 5-B
+
+
+
+
+
+
+
+
