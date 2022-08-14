@@ -1,0 +1,8 @@
+BASE
+use ecommerce                         -> Crea y selecciona la DB
+db                                    -> Valida la DB actual
+db.createCollection("mensajes")       -> Creación de la collection mensajes
+db.createCollection("productos")      -> Creación de la collection productos
+show collections                      -> Validamos las collections actuales
+
+PUNTO 1
