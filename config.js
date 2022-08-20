@@ -23,4 +23,5 @@ module.exports = {
   sqliteDB: {
     file: process.env.FILE_NAME || "./DB/ecommerce.sqlite",
   },
+  mongoDB: {},
 };
