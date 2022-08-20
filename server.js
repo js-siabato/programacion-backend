@@ -6,12 +6,13 @@ const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 
-const fs = require("fs");
+const config = require("./config.js");
 
 const handlebars = require("express-handlebars");
 
-const config = require("./config.js");
 const products = require("./components/products/network");
+const cart = require("./components/cart/network");
+const messages = require("./components/messages/network");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +31,21 @@ app.set("views", "./views");
 
 app.use(express.static("./public"));
 
-app.use("/", products);
+//VISTA PARA PRODUCTOS USANDO HANDLEBARS
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
+app.use("/api/productos", products);
+app.use("/api/carrito", cart);
+app.use("/api/mensajes", messages);
+
+app.use((req, res) => {
+  res.status(404).send({
+    error: "-2",
+    descripción: `ruta ${req.url} metodo ${req.method} no implementadas.`,
+  });
+});
 
 const server = httpServer.listen(config.api.port, () => {
   console.log("Api escuchando en el puerto ", config.api.port);
@@ -42,23 +57,12 @@ server.on("error", (error) => {
 
 io.on("connection", (socket) => {
   console.log(`El cliente ${socket.id} se ha conectado.`);
-  const messages = fs.readFileSync("messages.txt", "utf-8");
-  socket.emit("messages", JSON.parse(messages));
 
-  socket.on("newProduct", (data) => {
-    io.sockets.emit("products", data);
+  socket.on("newProduct", (products) => {
+    io.sockets.emit("products", products);
   });
 
-  socket.on("newMessage", (message) => {
-    let docMessages = fs.readFileSync("messages.txt", "utf-8");
-    if (!docMessages || !JSON.parse(docMessages).length) {
-      docMessages = [];
-    } else {
-      docMessages = JSON.parse(docMessages);
-    }
-    docMessages.push(message);
-    fs.writeFileSync("messages.txt", JSON.stringify(docMessages));
-
-    io.sockets.emit("messages", docMessages);
+  socket.on("newMessage", (messages) => {
+    io.sockets.emit("messages", messages);
   });
 });

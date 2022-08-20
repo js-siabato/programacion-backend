@@ -7,24 +7,18 @@
     name="productonuevo"
     autocomplete="off"
     target="dummyframe"
-    onsubmit="addProduct()"
+    onsubmit="addProduct(this)"
   >
     <div class="col-md-6">
       <label class="form-label" for="title">Nombre del producto</label>
-      <input
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        required
-      />
+      <input type="text" class="form-control" id="name" name="title" required />
     </div>
     <div class="col-md-6">
-      <label class="form-label" for="price">Precio</label>
+      <label class="form-label" for="price">Descripción</label>
       <input
         type="text"
         class="form-control"
-        id="price"
+        id="description"
         name="price"
         required
       />
@@ -34,8 +28,28 @@
       <input
         type="text"
         class="form-control"
-        id="thumbnail"
+        id="phone"
         name="thumbnail"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="price">Precio</label>
+      <input
+        type="number"
+        class="form-control"
+        id="price"
+        name="price"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="stock">Stock</label>
+      <input
+        type="number"
+        class="form-control"
+        id="stock"
+        name="price"
         required
       />
     </div>
@@ -45,43 +59,14 @@
 
 <div class="container mb-5">
   <h2 class="center h__md">Productos disponibles</h2>
-  {{#if list}}
-  <div class="table-responsive">
-      <table class="table table-sm table-hover table-striped">
-          <thead class="t-head-light">
-              <tr class="p__md--strong center">
-                  <th>Nombre</th>
-                  <th>Precio</th>
-                  <th>Foto</th>
-              </tr>
-          </thead>
-          <tbody class="center" id="row">
-              {{#each list}}
-              <tr id="row">
-                  <td>
-                      {{this.title}}
-                  </td>
-                  <td>
-                      $ {{this.price}}
-                  </td>
-                  <td>
-                      <img src="{{this.thumbnail}}" width="50" height="50">
-                  </td>
-              </tr>
-              {{/each}}
-          </tbody>
-      </table>
-  </div>
-  {{else}}
-  <h3 class="alert alert-danger">No se encontraron productos</h1>
-      {{/if}}
+  <div id="table"></div>
 </div>
 
 <div class="container mb-5">
   <h1>Centro de mensajes</h1>
   <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-    <form onsubmit="addMessage()" id="newMessage" target="dummyframe">
-      <div class="col-md-6">
+  <form onsubmit="addMessage(this)" id="newMessage" target="dummyframe">
+    <div class="col-md-6">
       <label class="form-label" for="title">Email</label>
       <input
         type="email"
@@ -90,11 +75,17 @@
         name="title"
         required
       />
-      <hr>
+      <hr />
       <div id="messages"></div>
-        <input class="form-control" type="text" id="message" placeholder="Cuéntanos algo..." required>
-        <input class="btn btn-primary" type="submit" value="Enviar">
-      </div>
-    </form>
+      <input
+        class="form-control"
+        type="text"
+        id="message"
+        placeholder="Cuéntanos algo..."
+        required
+      />
+      <input class="btn btn-primary" type="submit" value="Enviar" />
+    </div>
+  </form>
 
 </div>

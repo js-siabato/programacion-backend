@@ -1,78 +1,73 @@
-let products = [
-  {
-    title: "Cámara",
-    price: "900000",
-    thumbnail:
-      "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Camera-256.png",
-    id: 1,
-  },
-  {
-    title: "Rosa",
-    price: "2500",
-    thumbnail:
-      "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Rose-256.png",
-    id: 2,
-  },
-  {
-    title: "Fresas",
-    price: "10000",
-    thumbnail:
-      "https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Strawberry-256.png",
-    id: 3,
-  },
-];
+const CodeGenerator = require("node-code-generator");
+const TABLE = "productos";
 
-async function list() {
-  if (!products.length) {
-    return { message: "Sin productos!!" };
-  } else {
-    return products;
-  }
-}
+const generator = new CodeGenerator();
 
-async function get(id) {
-  const product = products.find((product) => product.id == id);
-  if (!product) {
-    return { error: "Producto no encontrado!!" };
-  } else {
-    return product;
-  }
-}
+module.exports = function (injectedStore) {
+  let store = injectedStore;
 
-async function insert(body) {
-  let id = 1;
-  if (!products || !products.length) {
-    products = [];
-  } else {
-    id = products[products.length - 1].id + 1;
+  async function list() {
+    const result = await store.list(TABLE);
+    if (!result.length) {
+      return { resultado: "No se encontraron productos." };
+    }
+    return result;
   }
 
-  body.id = id;
-  products.push(body);
-  // return body;
-  return products;
-}
-
-async function update(id, body) {
-  let product = products.find((product) => product.id == id);
-  if (!product) {
-    return { error: "Producto no encontrado!!" };
-  } else {
-    product.title = body.title;
-    product.price = body.price;
-    product.thumbnail = body.thumbnail;
-    return product;
+  async function get(id) {
+    const result = await store.get(TABLE, id);
+    if (!result.length) {
+      return { error: "Producto no encontrado!!" };
+    }
+    return result;
   }
-}
 
-async function remove(id) {
-  const product = products.find((product) => product.id == id);
-  if (!product) {
-    return { error: "Producto no encontrado!!" };
-  } else {
-    products.splice(products.indexOf(product), 1);
-    return products;
+  async function insert(body) {
+    for (let i = 0; i < body.length; i++) {
+      body[i].codigo = generator.randomChars(body[i].nombre, 8).toUpperCase();
+    }
+    const result = await store.insert(TABLE, body);
+
+    if (result) {
+      return {
+        resultado: "Producto(s) agregado(s) exitosamente.",
+        productos: await list(),
+      };
+    } else {
+      return {
+        ERROR: "No se agregaron los producto(s).",
+      };
+    }
   }
-}
 
-module.exports = { list, get, insert, update, remove };
+  async function update(id, body) {
+    const result = await store.update(TABLE, id, body);
+
+    if (result) {
+      return {
+        resultado: "Producto actualizado exitosamente.",
+        productos: await store.get(TABLE, id),
+      };
+    } else {
+      return {
+        ERROR: "Producto no encontrado!!",
+      };
+    }
+  }
+
+  async function remove(id) {
+    const result = await store.remove(TABLE, id);
+
+    if (result) {
+      return {
+        resultado: "Producto eliminado exitosamente.",
+      };
+    } else {
+      return {
+        ERROR: "Producto no encontrado!!",
+      };
+    }
+  }
+
+  return { list, get, insert, update, remove };
+};
