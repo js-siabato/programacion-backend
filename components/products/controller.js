@@ -16,7 +16,8 @@ module.exports = function (injectedStore) {
 
   async function get(id) {
     const result = await store.get(TABLE, id);
-    if (!result.length) {
+    console.log("🚀 ~ result", result);
+    if (!result) {
       return { error: "Producto no encontrado!!" };
     }
     return result;
@@ -30,18 +31,18 @@ module.exports = function (injectedStore) {
 
     if (result) {
       return {
-        resultado: "Producto(s) agregado(s) exitosamente.",
+        resultado: "Producto(s) creado(s) exitosamente.",
         productos: await list(),
       };
     } else {
       return {
-        ERROR: "No se agregaron los producto(s).",
+        ERROR: "No se creo los producto(s).",
       };
     }
   }
 
   async function update(id, body) {
-    const result = await store.update(TABLE, id, body);
+    const result = await store.updateProduct(TABLE, id, body);
 
     if (result) {
       return {

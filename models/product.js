@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const productosCollection = "productos";
 
@@ -20,7 +20,7 @@ const productoSchema = new mongoose.Schema({
   },
   precio: { type: Number, required: true, maxLength: 20 },
   stock: { type: Number, required: true, maxLength: 20 },
-  timestamp: { type: Date, required: true, maxLength: 50 },
+  timestamp: { type: Date, required: true, default: Date.now },
   codigo: {
     type: String,
     required: true,
@@ -28,4 +28,6 @@ const productoSchema = new mongoose.Schema({
   },
 });
 
-export const Producto = mongoose.model(productosCollection, productoSchema);
+module.exports = {
+  Producto: mongoose.model(productosCollection, productoSchema),
+};

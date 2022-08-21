@@ -1,94 +1,76 @@
-const fs = require("fs");
-const config = require("../../config");
+const TABLE = "carritos";
 
-async function insert() {
-  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
-  let id = 1;
+module.exports = function (injectedStore) {
+  let store = injectedStore;
 
-  if (!carts.length) {
-    carts = [];
-  } else {
-    id = carts[carts.length - 1].id + 1;
+  async function insert() {
+    const result = await store.insert(TABLE, { productos: [] });
+
+    if (result) {
+      return {
+        resultado: "Carrito creado exitosamente!!",
+        idCarrito: result._id,
+      };
+    } else {
+      return {
+        ERROR: "No se creo el carrito!!",
+      };
+    }
   }
 
-  const cart = {
-    id: id++,
-    timestamp: Date.now(),
-    productos: [],
-  };
+  async function remove(id) {
+    const result = await store.remove(TABLE, id);
 
-  carts.push(cart);
-  await fs.writeFileSync(config.data.carts, JSON.stringify(carts));
-  return { id: cart.id };
-}
-
-async function remove(id) {
-  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
-  const cart = carts.find((cart) => cart.id == id);
-  if (!cart) {
-    return { error: "Carrito no encontrado!!" };
-  }
-  carts.splice(carts.indexOf(cart), 1);
-  await fs.writeFileSync(config.data.carts, JSON.stringify(carts));
-  return carts;
-}
-
-async function listCart(id) {
-  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
-  const cart = carts.find((cart) => cart.id == id);
-  if (!cart) {
-    return { Error: "Carrito no encontrado!!" };
-  } else if (!cart.productos.length) {
-    return { Info: "Carrito vacio!!" };
-  }
-  return cart.productos;
-}
-
-async function insertProductsCart(id, body) {
-  let products = JSON.parse(fs.readFileSync(config.data.products, "utf-8"));
-  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
-
-  const cart = carts.find((cart) => cart.id == id);
-  const listCart = carts.filter((cart) => cart.id != id);
-  const product = products.find((product) => product.id == body.id_prod);
-
-  if (!cart) {
-    return { Error: "Carrito no encontrado!!" };
-  } else if (!product) {
-    return { Error: "Producto no encontrado!!" };
+    if (result) {
+      return {
+        resultado: "Carrito eliminado exitosamente.",
+      };
+    } else {
+      return {
+        ERROR: "Carrito no encontrado!!",
+      };
+    }
   }
 
-  cart.productos.push(product);
-  listCart.push(cart);
-  await fs.writeFileSync(config.data.carts, JSON.stringify(listCart));
-  return cart;
-}
+  async function listCart(id) {
+    const cart = await store.get(TABLE, id);
 
-async function removeProductCart(idCart, idProd) {
-  let carts = JSON.parse(fs.readFileSync(config.data.carts, "utf-8"));
-  const cart = carts.find((cart) => cart.id == idCart);
-  const listCart = carts.filter((cart) => cart.id != idCart);
+    if (!cart) {
+      return { Error: "Carrito no encontrado!!" };
+    }
 
-  if (!cart) {
-    return { Error: "Carrito no encontrado!!" };
+    if (!cart.productos.length) {
+      return { Info: "Carrito vacio!!" };
+    }
+    return cart.productos;
   }
 
-  const product = cart.productos.find((product) => product.id == idProd);
+  async function insertProductsCart(id, body) {
+    const cart = await store.get(TABLE, id);
+    const product = await store.get("productos", body.id_prod);
 
-  if (!product) {
-    return { Error: "Producto no encontrado!!" };
+    if (!cart) {
+      return { Error: "Carrito no encontrado!!" };
+    } else if (!product) {
+      return { Error: "Producto no encontrado!!" };
+    }
+
+    return await store.updateCart(TABLE, id, product);
   }
 
-  cart.productos.splice(cart.productos.indexOf(product), 1);
-  listCart.push(cart);
-  await fs.writeFileSync(config.data.carts, JSON.stringify(listCart));
-  return cart;
-}
+  async function removeProductCart(idCart, idProd) {
+    const cart = await store.get(TABLE, idCart);
+    if (!cart) {
+      return { Error: "Carrito no encontrado!!" };
+    }
 
-module.exports = {
-  insert,
-  remove,
-  listCart,
-  insertProductsCart,
-  removeProductCart,
+    const product = cart.productos.find((producto) => producto._id == idProd);
+    if (!product) {
+      return { Error: "Producto no encontrado!!" };
+    }
+
+    return await store.removeProductCart(TABLE, idCart, product);
+  }
+
+  return { insert, remove, listCart, insertProductsCart, removeProductCart };
 };
