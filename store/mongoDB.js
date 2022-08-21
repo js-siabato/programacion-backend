@@ -1,6 +1,7 @@
 const config = require("../config");
 const { Producto } = require("../models/product");
 const { Carrito } = require("../models/cart");
+const { Mensaje } = require("../models/message");
 const mongoose = require("mongoose");
 
 CRUD();
@@ -44,11 +45,19 @@ async function insert(table, data) {
     case "carritos":
       const cartSaveModel = new Carrito(data);
       return await cartSaveModel.save(data);
+    case "mensajes":
+      const messageSaveModel = new Mensaje(data);
+      return await messageSaveModel.save();
   }
 }
 
 async function list(table) {
-  return await Producto.find();
+  switch (table) {
+    case "productos":
+      return await Producto.find();
+    case "mensajes":
+      return await Mensaje.find();
+  }
 }
 
 async function get(table, id) {

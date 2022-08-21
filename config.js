@@ -7,9 +7,9 @@ module.exports = {
   },
   DB: {
     remoteDB: process.env.REMOTE_DB || true,
-    clientProduct: process.env.CLIENT_DB_PRODUCTS || "mongoDB",
-    clientMessages: process.env.CLIENT_DB_MESSAGES || "sqlite3",
-    clientCarts: process.env.CLIENT_DB_CARTS || "mongoDB",
+    clientProduct: process.env.CLIENT_DB_PRODUCTS || "mysql",
+    clientMessages: process.env.CLIENT_DB_MESSAGES || "mysql",
+    clientCarts: process.env.CLIENT_DB_CARTS || "mysql",
   },
   mariaDB: {
     host: process.env.MYSQL_HOST || "localhost",
