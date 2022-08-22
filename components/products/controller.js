@@ -28,15 +28,16 @@ module.exports = function (injectedStore) {
       body[i].codigo = generator.randomChars(body[i].nombre, 8).toUpperCase();
     }
     const result = await store.insert(TABLE, body);
+    console.log("🚀 ~ result----", result);
 
     if (result) {
       return {
         resultado: "Producto(s) creado(s) exitosamente.",
-        productos: await list(),
+        productos: await store.list(TABLE),
       };
     } else {
       return {
-        ERROR: "No se creo los producto(s).",
+        ERROR: "No se crearon los producto(s).",
       };
     }
   }

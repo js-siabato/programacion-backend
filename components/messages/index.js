@@ -7,6 +7,8 @@ if (config.DB.clientMessages === "mysql") {
   store = require("../../store/mongoDB");
 } else if (config.DB.clientMessages === "sqlite3") {
   store = require("../../store/sqliteDB");
+} else if (config.DB.clientMessages === "firebase") {
+  store = require("../../store/firebase");
 }
 
 const ctrl = require("./controller");
