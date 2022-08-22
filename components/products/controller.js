@@ -16,7 +16,7 @@ module.exports = function (injectedStore) {
 
   async function get(id) {
     const result = await store.get(TABLE, id);
-    console.log("🚀 ~ result", result);
+
     if (!result) {
       return { error: "Producto no encontrado!!" };
     }
@@ -28,7 +28,6 @@ module.exports = function (injectedStore) {
       body[i].codigo = generator.randomChars(body[i].nombre, 8).toUpperCase();
     }
     const result = await store.insert(TABLE, body);
-    console.log("🚀 ~ result----", result);
 
     if (result) {
       return {
