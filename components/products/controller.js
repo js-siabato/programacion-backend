@@ -42,7 +42,7 @@ module.exports = function (injectedStore) {
   }
 
   async function update(id, body) {
-    const result = await store.updateProduct(TABLE, id, body);
+    const result = await store.update(TABLE, id, body);
 
     if (result) {
       return {

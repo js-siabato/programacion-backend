@@ -9,7 +9,7 @@ module.exports = function (injectedStore) {
     if (result) {
       return {
         resultado: "Carrito creado exitosamente!!",
-        idCarrito: result._id,
+        idCarrito: result,
       };
     } else {
       return {
@@ -55,7 +55,7 @@ module.exports = function (injectedStore) {
       return { Error: "Producto no encontrado!!" };
     }
 
-    return await store.updateCart(TABLE, id, product);
+    return await store.update(TABLE, id, product);
   }
 
   async function removeProductCart(idCart, idProd) {
@@ -64,7 +64,9 @@ module.exports = function (injectedStore) {
       return { Error: "Carrito no encontrado!!" };
     }
 
-    const product = cart.productos.find((producto) => producto._id == idProd);
+    const product = cart.productos.find(
+      (producto) => producto._id == idProd || producto.id == idProd
+    );
     if (!product) {
       return { Error: "Producto no encontrado!!" };
     }

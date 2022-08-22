@@ -6,10 +6,10 @@ module.exports = {
     administrator: process.env.ADMINISTRATOR || true,
   },
   DB: {
-    remoteDB: process.env.REMOTE_DB || true,
-    clientProduct: process.env.CLIENT_DB_PRODUCTS || "firebase",
-    clientMessages: process.env.CLIENT_DB_MESSAGES || "firebase",
-    clientCarts: process.env.CLIENT_DB_CARTS || "firebase",
+    remoteDB: process.env.REMOTE_DB || false,
+    clientProduct: process.env.CLIENT_DB_PRODUCTS || "mongoDB",
+    clientMessages: process.env.CLIENT_DB_MESSAGES || "mongoDB",
+    clientCarts: process.env.CLIENT_DB_CARTS || "mongoDB",
   },
   mariaDB: {
     host: process.env.MYSQL_HOST || "localhost",
@@ -25,7 +25,7 @@ module.exports = {
   },
   mongoDBRemote: {
     user: process.env.MYSQL_USER || "jsiabato1",
-    password: process.env.MYSQL_PASS || "Vz5EPVEoSfevTq1E",
+    password: process.env.MYSQL_PASS || "prueba",
     database: process.env.MONGODB_DB || "ecommerce",
   },
 };

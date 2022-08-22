@@ -44,10 +44,12 @@ async function insert(table, data) {
       return await Producto.insertMany(data);
     case "carritos":
       const cartSaveModel = new Carrito(data);
-      return await cartSaveModel.save(data);
+      const result = await cartSaveModel.save(data);
+      return result._id;
     case "mensajes":
       const messageSaveModel = new Mensaje(data);
-      return await messageSaveModel.save();
+      const resultM = await messageSaveModel.save();
+      return resultM._id;
   }
 }
 
@@ -70,27 +72,27 @@ async function get(table, id) {
   }
 }
 
-async function updateProduct(table, id, body) {
-  if (!mongoose.Types.ObjectId.isValid(id)) return false;
-  return await Producto.findByIdAndUpdate(id, {
-    $set: {
-      nombre: body.nombre,
-      descripcion: body.descripcion,
-      foto: body.foto,
-      precio: body.precio,
-      stock: body.stock,
-      codigo: body.codigo,
-    },
-  });
-}
-
-async function updateCart(table, id, product) {
+async function update(table, id, body) {
   if (!mongoose.Types.ObjectId.isValid(id)) return false;
 
-  await Carrito.findByIdAndUpdate(id, {
-    $push: { productos: product },
-  });
-  return await Carrito.find({ _id: id });
+  switch (table) {
+    case "productos":
+      return await Producto.findByIdAndUpdate(id, {
+        $set: {
+          nombre: body.nombre,
+          descripcion: body.descripcion,
+          foto: body.foto,
+          precio: body.precio,
+          stock: body.stock,
+          codigo: body.codigo,
+        },
+      });
+    case "carritos":
+      await Carrito.findByIdAndUpdate(id, {
+        $push: { productos: body },
+      });
+      return await Carrito.find({ _id: id });
+  }
 }
 
 async function remove(table, id) {
@@ -115,8 +117,7 @@ module.exports = {
   list,
   insert,
   get,
-  updateProduct,
+  update,
   remove,
-  updateCart,
   removeProductCart,
 };

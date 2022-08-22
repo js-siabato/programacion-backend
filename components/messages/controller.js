@@ -17,7 +17,7 @@ module.exports = function (injectedStore) {
     if (result) {
       return {
         resultado: "Mensaje agregado exitosamente.",
-        mensajes: await list(),
+        idMensaje: result,
       };
     } else {
       return {
