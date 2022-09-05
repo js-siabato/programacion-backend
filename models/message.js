@@ -9,6 +9,10 @@ const mensajeSchema = new mongoose.Schema(
       required: true,
       maxLength: [50, "MAXIMO 50 CARACTERES!!"],
     },
+    nombre: {type: String},
+    apellido: {type: String},
+    edad: {type: String},
+    alias: {type: String},
     timestamp: { type: Date, required: true, default: Date.now },
     mensaje: {
       type: String,

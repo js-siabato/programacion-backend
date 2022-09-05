@@ -13,6 +13,18 @@ window.onload = function render() {
       console.log("ERROR: ", err);
     });
 
+  fetch("http://localhost:8080/api/productos-test", {
+    method: "GET",
+    headers: { "Content-type": "application/json;charset=UTF-8" },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      renderProductTest(json);
+    })
+    .catch((err) => {
+      console.log("ERROR: ", err);
+    });
+
   fetch("http://localhost:8080/api/mensajes", {
     method: "GET",
     headers: { "Content-type": "application/json;charset=UTF-8" },
@@ -25,6 +37,50 @@ window.onload = function render() {
       console.log("ERROR: ", err);
     });
 };
+
+function renderProductTest(products) {
+  let html = `<div class="table-responsive">
+                <table class="table table-sm table-hover table-striped">
+                    <thead class="t-head-light">
+                        <tr class="p__md--strong center">
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Stock</th>
+                            <th>Código</th>
+                            <th>Precio</th>
+                            <th>Foto</th>
+                        </tr>
+                    </thead>
+                    <tbody class="center" id="row">
+                        ${products
+                          .map((product) => {
+                            return `<tr id="row">
+                                      <td>
+                                        ${product.nombre}
+                                      </td>
+                                      <td>
+                                        ${product.descripcion}
+                                      </td>
+                                      <td>
+                                        ${product.stock}
+                                      </td>
+                                      <td>
+                                        ${product.codigo}
+                                      </td>
+                                      <td>
+                                        $ ${product.precio}
+                                      </td>
+                                      <td>
+                                        <img src="${product.foto}" width="50" height="50">
+                                      </td>
+                                    </tr>`;
+                          })
+                          .join(" ")}
+                    </tbody>
+                </table>
+              </div>`;
+  document.getElementById("table-test").innerHTML = html;
+}
 
 function renderProduct(products) {
   let html = "";

@@ -1,3 +1,5 @@
+const { normalizeMessages } = require("../../normalize/messages");
+
 const TABLE = "mensajes";
 
 module.exports = function (injectedStore) {
@@ -12,18 +14,20 @@ module.exports = function (injectedStore) {
   }
 
   async function insert(body) {
-    const result = await store.insert(TABLE, body);
+    const dataNormalize = normalizeMessages({ id: "messages", body });
+    console.log("🚀 ~ dataNormalize", JSON.stringify(dataNormalize));
+    // const result = await store.insert(TABLE, body);
 
-    if (result) {
-      return {
-        resultado: "Mensaje agregado exitosamente.",
-        idMensaje: result,
-      };
-    } else {
-      return {
-        ERROR: "No se agrego el mensaje.",
-      };
-    }
+    // if (result) {
+    //   return {
+    //     resultado: "Mensaje agregado exitosamente.",
+    //     idMensaje: result,
+    //   };
+    // } else {
+    //   return {
+    //     ERROR: "No se agrego el mensaje.",
+    //   };
+    // }
   }
 
   return { list, insert };

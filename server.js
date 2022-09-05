@@ -11,6 +11,7 @@ const config = require("./config.js");
 const handlebars = require("express-handlebars");
 
 const products = require("./components/products/network");
+const productsTest = require("./components/productsTest/network");
 const cart = require("./components/cart/network");
 const messages = require("./components/messages/network");
 
@@ -36,7 +37,16 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+app.get("/productos-test", (req, res) => {
+  res.render("products");
+});
+
+app.get("/mensajes", (req, res) => {
+  res.render("messages");
+});
+
 app.use("/api/productos", products);
+app.use("/api/productos-test", productsTest);
 app.use("/api/carrito", cart);
 app.use("/api/mensajes", messages);
 
