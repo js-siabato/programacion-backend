@@ -12,8 +12,4 @@ function generatorProducts() {
   };
 }
 
-function generatorAvatar() {
-  return faker.image.avatar();
-}
-
-module.exports = { generatorProducts, generatorAvatar };
+module.exports = { generatorProducts };

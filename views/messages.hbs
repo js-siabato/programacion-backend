@@ -1,5 +1,6 @@
 <div class="container mb-5">
   <h1>Centro de mensajes</h1>
+  <h1 id="compreision"></h1>
   <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
   <form onsubmit="addMessage(this)" id="newMessage" target="dummyframe">
     <div class="col-md-6">
@@ -46,6 +47,15 @@
         id="alias"
         name="alias"
         placeholder="Alias"
+        required
+      />
+      <label class="form-label" for="title">Avatar</label>
+      <input
+        type="text"
+        class="form-control"
+        id="avatar"
+        name="avatar"
+        placeholder="Url avatar"
         required
       />
       <br />

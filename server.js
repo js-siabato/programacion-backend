@@ -15,6 +15,8 @@ const productsTest = require("./components/productsTest/network");
 const cart = require("./components/cart/network");
 const messages = require("./components/messages/network");
 
+const { normalize, schema } = require("normalizr");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

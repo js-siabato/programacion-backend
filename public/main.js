@@ -1,5 +1,23 @@
 const socket = io.connect();
 
+const schemaAuthor = new normalizr.schema.Entity(
+  "author",
+  {},
+  { idAttribute: "email" }
+);
+
+const schemaMensaje = new normalizr.schema.Entity(
+  "post",
+  { author: schemaAuthor },
+  { idAttribute: "id" }
+);
+
+const schemaMensajes = new normalizr.schema.Entity(
+  "posts",
+  { mensajes: [schemaMensaje] },
+  { idAttribute: "id" }
+);
+
 window.onload = function render() {
   fetch("http://localhost:8080/api/productos", {
     method: "GET",
@@ -139,19 +157,46 @@ function renderProduct(products) {
 }
 
 function renderMessages(messages) {
+  console.log("🚀 ~ messages", messages);
+  const lengthNormalizedMensajes = JSON.stringify(messages).length;
+  const denormalizedMensajes = normalizr.denormalize(
+    messages.result,
+    schemaMensajes,
+    messages.entities
+  );
+  const lengthDenormalizedMensajes =
+    JSON.stringify(denormalizedMensajes).length;
+
+  const porcentajeCompresion = parseInt(
+    (lengthNormalizedMensajes / lengthDenormalizedMensajes) * 100
+  );
+
+  if (porcentajeCompresion <= 100) {
+    document.getElementById(
+      "compreision"
+    ).innerHTML = `(Compresion: ${porcentajeCompresion}%)`;
+  } else {
+    document.getElementById("compreision").innerHTML = `(Compresion: N/A)`;
+  }
+
   let html = "";
-  if (!messages.resultado) {
-    html = messages
+  if (messages.result) {
+    html = denormalizedMensajes.mensajes
       .map((message) => {
-        var numberOfMlSeconds = new Date(message.timestamp).getTime();
+        var numberOfMlSeconds = new Date(message._doc.timestamp).getTime();
         // El valor de 5 depende de las horas de diferencia del horario UTC.
         var addMlSeconds = 5 * 60 * 60000;
         var newDate = new Date(numberOfMlSeconds - addMlSeconds);
 
         return `<div>
-                <strong style="color:blue">${message.email}</strong>
+                <strong style="color:blue">${message._doc.author.email}</strong>
                 <h9 style="color:brown">[${newDate.toLocaleString()}]</h9>:
-                <em style="color:green">${message.mensaje}</em> </div>`;
+                <em style="color:green">${message._doc.text}</em>
+                <img src=${
+                  message._doc.author.avatar
+                } class="rounded-circle" style="width: 50px;"
+                alt="Avatar"/>
+                </div>`;
       })
       .join(" ");
   } else {
@@ -190,8 +235,15 @@ function addProduct(e) {
 function addMessage(e) {
   const form = document.getElementById("newMessage");
   const message = {
-    email: document.getElementById("email").value,
-    mensaje: document.getElementById("message").value,
+    author: {
+      email: document.getElementById("email").value,
+      nombre: document.getElementById("name").value,
+      apellido: document.getElementById("lastName").value,
+      edad: document.getElementById("age").value,
+      alias: document.getElementById("alias").value,
+      avatar: document.getElementById("avatar").value,
+    },
+    text: document.getElementById("message").value,
   };
 
   fetch("http://localhost:8080/api/mensajes", {
@@ -201,6 +253,7 @@ function addMessage(e) {
   })
     .then((response) => response.json())
     .then((json) => {
+      console.log("🚀 ~ json", json);
       socket.emit("newMessage", json.mensajes);
     })
     .catch((err) => {

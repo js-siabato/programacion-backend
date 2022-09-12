@@ -1,4 +1,18 @@
-const { normalizeMessages } = require("../../normalize/messages");
+const { normalize, schema } = require("normalizr");
+
+const schemaAuthor = new schema.Entity("author", {}, { idAttribute: "email" });
+
+const schemaMensaje = new schema.Entity(
+  "post",
+  { author: schemaAuthor },
+  { idAttribute: "id" }
+);
+
+const schemaMensajes = new schema.Entity(
+  "posts",
+  { mensajes: [schemaMensaje] },
+  { idAttribute: "id" }
+);
 
 const TABLE = "mensajes";
 
@@ -7,27 +21,32 @@ module.exports = function (injectedStore) {
 
   async function list() {
     const result = await store.list(TABLE);
+
     if (!result.length) {
       return { resultado: "No se encontraron mensajes." };
     }
-    return result;
+
+    const mensajesNormalize = { id: "mensajes", mensajes: result };
+    const normalizedMessages = normalize(mensajesNormalize, schemaMensajes);
+    return normalizedMessages;
   }
 
   async function insert(body) {
-    const dataNormalize = normalizeMessages({ id: "messages", body });
-    console.log("🚀 ~ dataNormalize", JSON.stringify(dataNormalize));
-    // const result = await store.insert(TABLE, body);
+    const mensajes = await store.list(TABLE);
 
-    // if (result) {
-    //   return {
-    //     resultado: "Mensaje agregado exitosamente.",
-    //     idMensaje: result,
-    //   };
-    // } else {
-    //   return {
-    //     ERROR: "No se agrego el mensaje.",
-    //   };
-    // }
+    let id = mensajes.length ? mensajes[mensajes.length - 1].id + 1 : 1;
+    const result = await store.insert(TABLE, { ...body, id: id });
+
+    if (result) {
+      return {
+        resultado: "Mensaje agregado exitosamente.",
+        mensajes: await list(),
+      };
+    } else {
+      return {
+        ERROR: "No se agrego el mensaje.",
+      };
+    }
   }
 
   return { list, insert };

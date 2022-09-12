@@ -64,6 +64,7 @@
 
 <div class="container mb-5">
   <h1>Centro de mensajes</h1>
+  <h1 id="compreision"></h1>
   <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
   <form onsubmit="addMessage(this)" id="newMessage" target="dummyframe">
     <div class="col-md-6">
@@ -76,7 +77,6 @@
         required
       />
       <hr />
-      <div id="messages"></div>
       <input
         class="form-control"
         type="text"
@@ -85,6 +85,7 @@
         required
       />
       <input class="btn btn-primary" type="submit" value="Enviar" />
+      <div id="messages"></div>
     </div>
   </form>
 
