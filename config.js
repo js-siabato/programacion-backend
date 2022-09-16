@@ -25,7 +25,7 @@ module.exports = {
   },
   mongoDBRemote: {
     user: process.env.MYSQL_USER || "jsiabato1",
-    password: process.env.MYSQL_PASS || "prueba",
+    password: process.env.MYSQL_PASS || "kcOl9ttaKPIQeOGX",
     database: process.env.MONGODB_DB || "ecommerce",
   },
 };

@@ -157,7 +157,6 @@ function renderProduct(products) {
 }
 
 function renderMessages(messages) {
-  console.log("🚀 ~ messages", messages);
   const lengthNormalizedMensajes = JSON.stringify(messages).length;
   const denormalizedMensajes = normalizr.denormalize(
     messages.result,
@@ -253,7 +252,6 @@ function addMessage(e) {
   })
     .then((response) => response.json())
     .then((json) => {
-      console.log("🚀 ~ json", json);
       socket.emit("newMessage", json.mensajes);
     })
     .catch((err) => {
@@ -262,6 +260,11 @@ function addMessage(e) {
 
   form.reset();
   return false;
+}
+
+function login(e) {
+  const name = document.getElementById("name").value;
+
 }
 
 socket.on("products", (data) => {
