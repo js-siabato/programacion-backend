@@ -263,8 +263,14 @@ function addMessage(e) {
 }
 
 function login(e) {
-  const name = document.getElementById("name").value;
-
+  fetch("http://localhost:8080/login", {
+    method: "POST",
+    headers: { "Content-type": "application/json;charset=UTF-8" },
+  })
+    .then((response) => response.json())
+    .catch((err) => {
+      console.log("ERROR: ", err);
+    });
 }
 
 socket.on("products", (data) => {

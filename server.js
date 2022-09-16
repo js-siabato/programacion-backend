@@ -21,8 +21,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+/*----------------------------------------------*/
+/*           Persistencia por MongoDB.          */
+/*----------------------------------------------*/
 const MongoStore = require("connect-mongo");
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+/*----------------------------------------------*/
 
 app.use(
   session({
@@ -36,11 +40,10 @@ app.use(
         config.mongoDBRemote.database +
         "?retryWrites=true&w=majority",
       mongoOptions: advancedOptions,
+      resave: false,
       ttl: 60,
     }),
     secret: "secret!!",
-    resave: false,
-    saveUninitialized: false,
   })
 );
 
@@ -60,7 +63,16 @@ app.use(express.static("./public"));
 
 //VISTA PARA PRODUCTOS USANDO HANDLEBARS
 app.get("/", (req, res) => {
-  console.log("🚀 ~ req.session", req.session);
+  if (req.query.name && req.session.name) {
+    res.render("home", { name: req.query.name });
+  } else {
+    res.render("home", { name: "" });
+  }
+});
+
+app.get("/login", (req, res) => {
+  console.log("🚀 ~ req.query.name", req.query.name);
+  req.session.name = req.query.name;
   res.render("home", { name: req.query.name });
 });
 
