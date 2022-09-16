@@ -1,4 +1,6 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
 
@@ -11,11 +13,36 @@ const config = require("./config.js");
 const handlebars = require("express-handlebars");
 
 const products = require("./components/products/network");
+const productsTest = require("./components/productsTest/network");
 const cart = require("./components/cart/network");
 const messages = require("./components/messages/network");
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+const MongoStore = require("connect-mongo");
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://" +
+        config.mongoDBRemote.user +
+        ":" +
+        config.mongoDBRemote.password +
+        "@cluster0.zrdkmus.mongodb.net/" +
+        config.mongoDBRemote.database +
+        "?retryWrites=true&w=majority",
+      mongoOptions: advancedOptions,
+      ttl: 60,
+    }),
+    secret: "secret!!",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.engine(
   "hbs",
@@ -33,10 +60,20 @@ app.use(express.static("./public"));
 
 //VISTA PARA PRODUCTOS USANDO HANDLEBARS
 app.get("/", (req, res) => {
-  res.render("home");
+  console.log("🚀 ~ req.session", req.session);
+  res.render("home", { name: req.query.name });
+});
+
+app.get("/productos-test", (req, res) => {
+  res.render("products");
+});
+
+app.get("/mensajes", (req, res) => {
+  res.render("messages");
 });
 
 app.use("/api/productos", products);
+app.use("/api/productos-test", productsTest);
 app.use("/api/carrito", cart);
 app.use("/api/mensajes", messages);
 

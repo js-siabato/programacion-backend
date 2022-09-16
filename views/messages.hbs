@@ -1,0 +1,76 @@
+<div class="container mb-5">
+  <h1>Centro de mensajes</h1>
+  <h1 id="compreision"></h1>
+  <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+  <form onsubmit="addMessage(this)" id="newMessage" target="dummyframe">
+    <div class="col-md-6">
+      <label class="form-label" for="title">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="Email"
+        required
+      />
+      <label class="form-label" for="title">Nombre</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        placeholder="Nombres"
+        required
+      />
+      <label class="form-label" for="title">Apellido</label>
+      <input
+        type="text"
+        class="form-control"
+        id="lastName"
+        name="lastName"
+        placeholder="Apellido"
+        required
+      />
+      <label class="form-label" for="title">Edad</label>
+      <input
+        type="text"
+        class="form-control"
+        id="age"
+        name="age"
+        placeholder="Edad"
+        required
+      />
+      <label class="form-label" for="title">Alias</label>
+      <input
+        type="text"
+        class="form-control"
+        id="alias"
+        name="alias"
+        placeholder="Alias"
+        required
+      />
+      <label class="form-label" for="title">Avatar</label>
+      <input
+        type="text"
+        class="form-control"
+        id="avatar"
+        name="avatar"
+        placeholder="Url avatar"
+        required
+      />
+      <br />
+      <input
+        class="form-control"
+        type="text"
+        id="message"
+        placeholder="Cuéntanos algo..."
+        required
+      />
+      <input class="btn btn-primary" type="submit" value="Enviar" />
+      <hr />
+      <div id="messages"></div>
+
+    </div>
+  </form>
+
+</div>
