@@ -6,7 +6,13 @@
         style="display: flex; justify-content: space-between"
       >
         <h2>Bienvenid@ {{name}}</h2>
-        <button type="button" class="btn btn-warning">Desloguear</button>
+        <form action="/logout" method="get">
+          <button
+            id="logout"
+            type="submit"
+            class="btn btn-warning"
+          >Desloguear</button>
+        </form>
       </div>
       <h2 class="center">Agregar producto nuevo</h2>
       <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
@@ -113,8 +119,9 @@
         id="productonuevo"
         name="productonuevo"
         autocomplete="off"
-        onsubmit="login(this)"
-        method="GET"
+        action="/login"
+        method="get"
+        {{! onsubmit="login(this)" }}
       >
         <div class="col-md-6">
           <label class="form-label" for="title">Ingrese su nombre</label>

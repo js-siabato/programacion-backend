@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 /*           Persistencia por MongoDB.          */
 /*----------------------------------------------*/
 const MongoStore = require("connect-mongo");
+const { setTimeout } = require("timers/promises");
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 /*----------------------------------------------*/
 
@@ -70,10 +71,15 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/login", (req, res) => {
-  console.log("🚀 ~ req.query.name", req.query.name);
+app.get("/login", (req, res, next) => {
   req.session.name = req.query.name;
-  res.render("home", { name: req.query.name });
+  res.redirect(`/?name=${req.query.name}`);
+});
+
+app.get("/logout", (req, res) => {
+  const name = req.session.name;
+  req.session.destroy();
+  res.render("logout", { name: name });
 });
 
 app.get("/productos-test", (req, res) => {
